@@ -1,17 +1,11 @@
-import React, { useState } from 'react';
 import { withFormik } from 'formik';
-import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { graphql } from 'react-apollo';
+import { Button, Container, Form as FormContainer, Header, Input, Message } from 'semantic-ui-react';
 import * as yup from 'yup';
 
-import {
-  Form as FormContainer,
-  Container,
-  Button,
-  Input,
-  Header,
-  Message,
-} from 'semantic-ui-react';
 
 const loginMutation = gql`
   mutation($email: String!, $password: String!) {
@@ -33,7 +27,7 @@ const InnerForm = ({
   touched,
   errors,
   httpErrors,
-  isSubmitting
+  isSubmitting,
 }) => (
   <Container text>
     <FormContainer onSubmit={handleSubmit} loading={isSubmitting}>
@@ -74,6 +68,24 @@ const InnerForm = ({
   </Container>
 );
 
+InnerForm.propTypes = {
+  errors: PropTypes.objectOf({
+    email: PropTypes.string,
+    password: PropTypes.string,
+  }).isRequired,
+  handleChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  httpErrors: PropTypes.arrayOf({
+    message: PropTypes.string,
+    path: PropTypes.string,
+  }).isRequired,
+  isSubmitting: PropTypes.bool.isRequired,
+  touched: PropTypes.objectOf({
+    email: PropTypes.string,
+    password: PropTypes.string,
+  }).isRequired,
+};
+
 const Form = withFormik({
   mapPropsToValues: () => ({
     password: '',
@@ -113,9 +125,7 @@ const Login = (props) => {
       return setHttpErrors(login.errors);
     }
 
-    if (login.ok && !login.errors) {
-      props.history.push('/home');
-    }
+    return props.history.push('/home');
   };
 
   return (
@@ -124,6 +134,15 @@ const Login = (props) => {
       httpErrors={httpErrors}
     />
   );
+};
+
+Login.propTypes = {
+  history: PropTypes.objectOf({
+    history: PropTypes.objectOf({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
+  }).isRequired,
+  mutate: PropTypes.func.isRequired,
 };
 
 export default graphql(loginMutation)(Login);

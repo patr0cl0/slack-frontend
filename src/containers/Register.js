@@ -1,16 +1,9 @@
-import React, { useState } from 'react';
 import { withFormik } from 'formik';
-import * as yup from 'yup';
-import {
-  Form as FormContainer,
-  Container,
-  Button,
-  Input,
-  Header,
-  Message,
-} from 'semantic-ui-react';
 import gql from 'graphql-tag';
+import React, { useState } from 'react';
 import { graphql } from 'react-apollo';
+import { Button, Container, Form as FormContainer, Header, Input, Message } from 'semantic-ui-react';
+import * as yup from 'yup';
 
 const registerMutation = gql`
   mutation($username: String!, $email: String!, $password: String!) {
