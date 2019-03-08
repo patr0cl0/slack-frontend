@@ -7,6 +7,7 @@ import {
 
 import Home from './containers/Home';
 import Registration from './containers/Register';
+import Login from './containers/Login';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/signup" component={Registration} />
+        <Route exact path="/login" component={Login} />
       </Switch>
     </Router>
   );

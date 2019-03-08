@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { withFormik } from 'formik';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import * as yup from 'yup';
+
 import {
   Form as FormContainer,
   Container,
@@ -9,16 +12,16 @@ import {
   Header,
   Message,
 } from 'semantic-ui-react';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
 
-const registerMutation = gql`
-  mutation($username: String!, $email: String!, $password: String!) {
-    register(username: $username, email: $email, password: $password){
+const loginMutation = gql`
+  mutation($email: String!, $password: String!) {
+    login(email: $email, password: $password){
       errors {
         message
         path
       }
+      token
+      refreshToken
       ok
     }
   }
@@ -34,15 +37,7 @@ const InnerForm = ({
 }) => (
   <Container text>
     <FormContainer onSubmit={handleSubmit} loading={isSubmitting}>
-      <Header>Register</Header>
-
-      <Input
-        fluid
-        error={Boolean(touched.username && errors.username)}
-        name="username"
-        placeholder={(touched.username && errors.username) ? errors.username : 'Username'}
-        onChange={handleChange}
-      />
+      <Header>Login</Header>
 
       <Input
         fluid
@@ -65,14 +60,14 @@ const InnerForm = ({
       <Button
         type="submit"
       >
-        Sign Up!
+        Login!
       </Button>
     </FormContainer>
 
     {httpErrors.length > 0 && (
       <Message
         error
-        header="error"
+        header="There was an error"
         list={httpErrors.map(err => err.message)}
       />
     )}
@@ -81,7 +76,6 @@ const InnerForm = ({
 
 const Form = withFormik({
   mapPropsToValues: () => ({
-    username: '',
     password: '',
     email: '',
   }),
@@ -108,28 +102,28 @@ const Form = withFormik({
 })(InnerForm);
 
 
-const Registration = (props) => {
+const Login = (props) => {
   const [httpErrors, setHttpErrors] = useState([]);
-  const onSubmit = async (data) => {
-    const { data: { register } } = await props.mutate({
+  const handleSubmit = async (data) => {
+    const { data: { login } } = await props.mutate({
       variables: data,
     });
 
-    if (register.errors && register.errors.length > 0) {
-      return setHttpErrors(register.errors);
+    if (login.errors && login.errors.length > 0) {
+      return setHttpErrors(login.errors);
     }
 
-    if (register.ok && !register.errors) {
+    if (login.ok && !login.errors) {
       props.history.push('/home');
     }
   };
 
   return (
     <Form
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
       httpErrors={httpErrors}
     />
   );
 };
 
-export default graphql(registerMutation)(Registration);
+export default graphql(loginMutation)(Login);
