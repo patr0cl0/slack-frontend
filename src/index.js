@@ -5,6 +5,8 @@ import { ApolloProvider } from 'react-apollo';
 
 import App from './App';
 
+import 'semantic-ui-css/semantic.min.css';
+
 const client = new ApolloClient({
   uri: 'http://localhost:8000/graphql',
 });

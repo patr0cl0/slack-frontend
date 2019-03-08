@@ -11,12 +11,12 @@ const allUsersQuery = gql`
   }
 `;
 
-const Home = ({ data: { loading, allUsers } }) => loading ? <span>asdas</span> : allUsers.map(user => (
-        <h1 key={user._id}>
-          {user._id}
-          /
-          {user.username}
-        </h1>
-      ))
+const Home = ({ data: { allUsers = [] } }) => allUsers.map(user => (
+  <h1 key={user._id}>
+    {user._id}
+    /
+    {user.username}
+  </h1>
+));
 
 export default graphql(allUsersQuery)(Home);
