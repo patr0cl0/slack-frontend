@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 import CreateTeam from './containers/CreateTeam';
 import Home from './containers/Home';
 import Login from './containers/Login';
-import Registration from './containers/Register';
+import Register from './containers/Register';
+import ViewTeam from './containers/ViewTeam';
 
 const hasValidAuthentication = () => {
   try {
@@ -37,9 +38,10 @@ const App = () => (
   <Router>
     <Switch>
       <Route exact path="/" component={Home} />
-      <Route exact path="/signup" component={Registration} />
+      <Route exact path="/signup" component={Register} />
       <Route exact path="/login" component={Login} />
       <PrivateRoute exact path="/create-team" component={CreateTeam} />
+      <PrivateRoute exact path="/view-team" component={ViewTeam} />
     </Switch>
   </Router>
 );
