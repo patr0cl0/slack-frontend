@@ -91,8 +91,6 @@ const CreateTeam = (props) => {
       variables: data,
     });
 
-    console.log(createTeam)
-
     if (createTeam.errors && createTeam.errors.length > 0) {
       return setHttpErrors(createTeam.errors);
     }
