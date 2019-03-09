@@ -7,15 +7,15 @@ export const reactRouterPropTypes = {
 };
 
 export const formikPropTypes = {
+  handleChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
   errors: PropTypes.shape({
     email: PropTypes.string,
     password: PropTypes.string,
   }).isRequired,
-  handleChange: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
   touched: PropTypes.shape({
-    email: PropTypes.string,
-    password: PropTypes.string,
+    email: PropTypes.boolean,
+    password: PropTypes.boolean,
   }).isRequired,
 };
 

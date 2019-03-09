@@ -7,15 +7,13 @@ import { Button, Container, Form as FormContainer, Header, Input, Message } from
 import * as yup from 'yup';
 import { formikPropTypes, httpErrorPropTypes, reactRouterPropTypes } from '../utils/commonProptypes';
 
-const loginMutation = gql`
-  mutation($email: String!, $password: String!) {
-    login(email: $email, password: $password){
+const createTeamMutation = gql`
+  mutation($name: String!) {
+    createTeam(name: $name){
       errors {
         message
         path
       }
-      token
-      refreshToken
       ok
     }
   }
@@ -31,38 +29,27 @@ const InnerForm = ({
 }) => (
   <Container text>
     <FormContainer onSubmit={handleSubmit} loading={isSubmitting}>
-      <Header>Login</Header>
+      <Header>Create Team</Header>
 
       <Input
         fluid
-        error={Boolean(touched.email && errors.email)}
-        name="email"
-        type="email"
-        placeholder={(touched.email && errors.email) ? errors.email : 'Email'}
-        onChange={handleChange}
-      />
-
-      <Input
-        fluid
-        error={Boolean(touched.password && errors.password)}
-        name="password"
-        type="password"
-        placeholder={(touched.password && errors.password) ? errors.password : 'Password'}
+        error={Boolean(touched.name && errors.name)}
+        name="name"
+        placeholder={(touched.name && errors.name) ? errors.name : 'name'}
         onChange={handleChange}
       />
 
       <Button
         type="submit"
       >
-        Login!
+        Create!
       </Button>
-
     </FormContainer>
 
     {httpErrors.length > 0 && (
       <Message
         error
-        header="There was an error"
+        header="error"
         list={httpErrors.map(err => err.message)}
       />
     )}
@@ -76,19 +63,14 @@ InnerForm.propTypes = {
 
 const Form = withFormik({
   mapPropsToValues: () => ({
-    password: '',
-    email: '',
+    name: '',
   }),
   validationSchema: yup.object({
-    email: yup
+    name: yup
       .string()
-      .email('email has to be valid')
-      .required('email is required'),
-    password: yup
-      .string()
-      .min(6, 'password has to be min 6 length')
-      .max(24, 'password has to be max 24 length')
-      .required('password required'),
+      .min(4, 'name has to be min 4 length')
+      .max(24, 'name has to be max 24 length')
+      .required('name required'),
   }),
   handleSubmit: async (values, { props, setSubmitting }) => {
     try {
@@ -102,34 +84,33 @@ const Form = withFormik({
 })(InnerForm);
 
 
-const Login = (props) => {
+const CreateTeam = (props) => {
   const [httpErrors, setHttpErrors] = useState([]);
-  const handleSubmit = async (data) => {
-    const { data: { login } } = await props.mutate({
+  const onSubmit = async (data) => {
+    const { data: { createTeam } } = await props.mutate({
       variables: data,
     });
 
-    if (login.errors && login.errors.length > 0) {
-      return setHttpErrors(login.errors);
-    }
+    console.log(createTeam)
 
-    localStorage.setItem('token', login.token);
-    localStorage.setItem('refreshToken', login.refreshToken);
+    if (createTeam.errors && createTeam.errors.length > 0) {
+      return setHttpErrors(createTeam.errors);
+    }
 
     return props.history.push('/home');
   };
 
   return (
     <Form
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
       httpErrors={httpErrors}
     />
   );
 };
 
-Login.propTypes = {
+CreateTeam.propTypes = {
   ...reactRouterPropTypes,
   mutate: PropTypes.func.isRequired,
 };
 
-export default graphql(loginMutation)(Login);
+export default graphql(createTeamMutation)(CreateTeam);

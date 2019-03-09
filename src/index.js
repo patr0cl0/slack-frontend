@@ -1,18 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from 'react-apollo';
-
+import 'semantic-ui-css/semantic.min.css';
+import ApolloProvider from './ApolloProvider';
 import App from './App';
 
-import 'semantic-ui-css/semantic.min.css';
-
-const client = new ApolloClient({
-  uri: 'http://localhost:8000/graphql',
-});
-
 ReactDOM.render((
-  <ApolloProvider client={client}>
+  <ApolloProvider>
     <App />
   </ApolloProvider>
 ), document.getElementById('root'));
