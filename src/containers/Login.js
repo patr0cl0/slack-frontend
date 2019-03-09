@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { graphql } from 'react-apollo';
 import { Button, Container, Form as FormContainer, Header, Input, Message } from 'semantic-ui-react';
 import * as yup from 'yup';
+import { formikPropTypes, httpErrorPropTypes, reactRouterPropTypes } from '../utils/commonProptypes';
 
 
 const loginMutation = gql`
@@ -56,6 +57,7 @@ const InnerForm = ({
       >
         Login!
       </Button>
+
     </FormContainer>
 
     {httpErrors.length > 0 && (
@@ -69,21 +71,8 @@ const InnerForm = ({
 );
 
 InnerForm.propTypes = {
-  errors: PropTypes.objectOf({
-    email: PropTypes.string,
-    password: PropTypes.string,
-  }).isRequired,
-  handleChange: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  httpErrors: PropTypes.arrayOf({
-    message: PropTypes.string,
-    path: PropTypes.string,
-  }).isRequired,
-  isSubmitting: PropTypes.bool.isRequired,
-  touched: PropTypes.objectOf({
-    email: PropTypes.string,
-    password: PropTypes.string,
-  }).isRequired,
+  ...formikPropTypes,
+  ...httpErrorPropTypes,
 };
 
 const Form = withFormik({
@@ -137,11 +126,7 @@ const Login = (props) => {
 };
 
 Login.propTypes = {
-  history: PropTypes.objectOf({
-    history: PropTypes.objectOf({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
-  }).isRequired,
+  ...reactRouterPropTypes,
   mutate: PropTypes.func.isRequired,
 };
 

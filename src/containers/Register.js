@@ -1,9 +1,11 @@
 import { withFormik } from 'formik';
 import gql from 'graphql-tag';
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { graphql } from 'react-apollo';
 import { Button, Container, Form as FormContainer, Header, Input, Message } from 'semantic-ui-react';
 import * as yup from 'yup';
+import { formikPropTypes, httpErrorPropTypes, reactRouterPropTypes } from '../utils/commonProptypes';
 
 const registerMutation = gql`
   mutation($username: String!, $email: String!, $password: String!) {
@@ -23,7 +25,7 @@ const InnerForm = ({
   touched,
   errors,
   httpErrors,
-  isSubmitting
+  isSubmitting,
 }) => (
   <Container text>
     <FormContainer onSubmit={handleSubmit} loading={isSubmitting}>
@@ -72,6 +74,11 @@ const InnerForm = ({
   </Container>
 );
 
+InnerForm.propTypes = {
+  ...formikPropTypes,
+  ...httpErrorPropTypes,
+};
+
 const Form = withFormik({
   mapPropsToValues: () => ({
     username: '',
@@ -112,9 +119,7 @@ const Registration = (props) => {
       return setHttpErrors(register.errors);
     }
 
-    if (register.ok && !register.errors) {
-      props.history.push('/home');
-    }
+    return props.history.push('/home');
   };
 
   return (
@@ -123,6 +128,11 @@ const Registration = (props) => {
       httpErrors={httpErrors}
     />
   );
+};
+
+Registration.propTypes = {
+  ...reactRouterPropTypes,
+  mutate: PropTypes.func.isRequired,
 };
 
 export default graphql(registerMutation)(Registration);
