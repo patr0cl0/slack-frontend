@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import CreateTeam from './containers/CreateTeam';
-import Home from './containers/Home';
-import Login from './containers/Login';
-import Register from './containers/Register';
-import ViewTeam from './containers/ViewTeam';
+import CreateTeam from './routes/CreateTeam';
+import Home from './routes/Home';
+import Login from './routes/Login';
+import Register from './routes/Register';
+import ViewTeam from './routes/ViewTeam';
 
 const hasValidAuthentication = () => {
   try {

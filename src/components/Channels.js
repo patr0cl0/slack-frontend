@@ -1,4 +1,5 @@
 /* eslint-disable react/no-array-index-key */
+import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -71,10 +72,11 @@ const ChannelLabel = styled.div`
   cursor: pointer;  
   &:before {
     content: '#';
+    margin-right: 4px;
   }
 `;
 
-const Channels = () => (
+const Channels = ({ username, channels, users }) => (
   <ChannelsContainer>
     <div className="header">
       <span className="header-title">
@@ -82,7 +84,7 @@ const Channels = () => (
       </span>
       <div>
         <UserLabel>
-          FernandWTF
+          {username}
         </UserLabel>
       </div>
 
@@ -92,8 +94,8 @@ const Channels = () => (
       <span className="channels-title title">
         CHANNELS
       </span>
-      {['Fernando', 'Louise', 'Michel', 'Jhon'].map((name, i) => (
-        <ChannelLabel key={i}>{name}</ChannelLabel>
+      {channels.map(({ name, _id }) => (
+        <ChannelLabel key={_id}>{name}</ChannelLabel>
       ))}
     </div>
 
@@ -101,11 +103,23 @@ const Channels = () => (
       <span className="direct-messages-title title">
         DIRECT MESSAGES
       </span>
-      {['Fernando', 'Louise', 'Michel', 'Jhon'].map((name, i) => (
-        <UserLabel key={i}>{name}</UserLabel>
+      {users.map(({ name, _id }) => (
+        <UserLabel key={_id}>{name}</UserLabel>
       ))}
     </div>
   </ChannelsContainer>
 );
+
+Channels.propTypes = {
+  username: PropTypes.string.isRequired,
+  channels: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.name,
+  })).isRequired,
+  users: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.name,
+  })).isRequired,
+};
 
 export default Channels;

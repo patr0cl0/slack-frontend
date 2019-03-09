@@ -1,4 +1,5 @@
 import React from 'react';
+import { Input } from 'semantic-ui-react';
 import styled from 'styled-components';
 
 const MessageInputContainer = styled.div`
@@ -12,7 +13,7 @@ const MessageInputContainer = styled.div`
 
 const MessageInput = props => (
   <MessageInputContainer>
-    <input {...props} />
+    <Input fluid {...props} />
   </MessageInputContainer>
 );
 

@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import Channels from '../components/Channels';
 import Header from '../components/Header';
 import MessageInput from '../components/MessageInput';
 import Messages from '../components/Messages';
-import Teams from '../components/Teams';
+import Sidebar from '../containers/Sidebar';
 
 const ViewTeamContainer = styled.div`
   display: grid;
@@ -16,8 +15,7 @@ const ViewTeamContainer = styled.div`
 
 export default () => (
   <ViewTeamContainer>
-    <Teams>Teams</Teams>
-    <Channels>Channels</Channels>
+    <Sidebar />
     <Header>Header</Header>
     <Messages>
       qwd
