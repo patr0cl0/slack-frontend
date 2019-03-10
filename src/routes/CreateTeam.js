@@ -1,26 +1,11 @@
 import { withFormik } from 'formik';
-import gql from 'graphql-tag';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 import { Button, Container, Form as FormContainer, Header, Input, Message } from 'semantic-ui-react';
 import * as yup from 'yup';
+import { createTeamMutation } from '../graphql/team';
 import { formikPropTypes } from '../utils/commonProptypes';
-
-const createTeamMutation = gql`
-  mutation($name: String!) {
-    createTeam(name: $name){
-      team {
-        _id
-      }
-      errors {
-        message
-        path
-      }
-      ok
-    }
-  }
-`;
 
 const InnerForm = ({
   handleChange,

@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 
@@ -80,7 +81,7 @@ const ChannelLabel = styled.div`
   }
 `;
 
-const Channels = ({ username, channels, users, teamName, onCreateChannelClick }) => (
+const Channels = ({ username, channels, users, teamName, teamId, onCreateChannelClick }) => (
   <ChannelsContainer>
     <div className="header">
       <span className="header-title">
@@ -103,7 +104,9 @@ const Channels = ({ username, channels, users, teamName, onCreateChannelClick })
         />
       </span>
       {channels.map(({ name, _id }) => (
-        <ChannelLabel key={_id}>{name}</ChannelLabel>
+        <Link key={_id} to={`/view-team/${teamId}/${_id}`}>
+          <ChannelLabel>{name}</ChannelLabel>
+        </Link>
       ))}
     </div>
 
@@ -121,6 +124,7 @@ const Channels = ({ username, channels, users, teamName, onCreateChannelClick })
 Channels.propTypes = {
   username: PropTypes.string.isRequired,
   teamName: PropTypes.string.isRequired,
+  teamId: PropTypes.string.isRequired,
   onCreateChannelClick: PropTypes.func.isRequired,
   channels: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,

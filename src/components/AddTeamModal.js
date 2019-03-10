@@ -5,11 +5,10 @@ import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 import { Button, Container, Form as FormContainer, Header, Input, Message, Modal } from 'semantic-ui-react';
 import * as yup from 'yup';
-import { createChannelMutation } from '../graphql/channel';
-import { allTeamsMutation } from '../graphql/team';
+import { allTeamsMutation, createTeamMutation } from '../graphql/team';
 import { formikPropTypes } from '../utils/commonProptypes';
 
-const AddChannelForm = ({
+const AddTeamForm = ({
   handleChange,
   handleSubmit,
   touched,
@@ -21,7 +20,7 @@ const AddChannelForm = ({
   <Modal open={open} onClose={onClose} style={{ padding: '4rem' }}>
     <Container text>
       <FormContainer onSubmit={handleSubmit} loading={isSubmitting}>
-        <Header>Create channel</Header>
+        <Header>Create Team</Header>
 
         <FormContainer.Field>
           <Input
@@ -56,7 +55,7 @@ const AddChannelForm = ({
   </Modal>
 );
 
-AddChannelForm.propTypes = {
+AddTeamForm.propTypes = {
   ...formikPropTypes,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
@@ -64,7 +63,7 @@ AddChannelForm.propTypes = {
 
 export default compose(
   withRouter,
-  graphql(createChannelMutation),
+  graphql(createTeamMutation),
   withFormik({
     mapPropsToValues: () => ({
       name: '',
@@ -76,49 +75,52 @@ export default compose(
         .max(24, 'name has to be max 24 length')
         .required('name required'),
     }),
-    handleSubmit: async (values, { props: { history, mutate, teamId, onClose }, setSubmitting, setErrors }) => {
+    handleSubmit: async (values, {
+      props: { history, mutate, onClose },
+      setSubmitting,
+      setErrors,
+    }) => {
       try {
         const { data: response } = await mutate({
-          variables: { ...values, teamId },
-          optimisticResponse: {
-            createChannel: {
-              __typename: 'Mutation',
-              ok: true,
-              channel: {
-                __typename: 'Channel',
-                name: values.name,
-                _id: '-1',
-              },
-              errors: null,
-            },
-          },
-          update: (store, { data: { createChannel } }) => {
-            const { ok, channel } = createChannel;
+          variables: values,
+          // optimisticResponse: {
+          //   createTeam: {
+          //     __typename: 'Mutation',
+          //     ok: true,
+          //     channel: {
+          //       __typename: 'Channel',
+          //       name: values.name,
+          //       _id: '-1',
+          //     },
+          //     errors: null,
+          //   },
+          // },
+          update: (store, { data: { createTeam } }) => {
+            const { ok, team } = createTeam;
 
             if (!ok) {
               return;
             }
 
             const data = store.readQuery({ query: allTeamsMutation });
-            const currentTeamIdx = data.allTeams.findIndex(team => team._id === teamId);
-            data.allTeams[currentTeamIdx].channels.push(channel);
+            data.allTeams.push(team);
             store.writeQuery({ query: allTeamsMutation, data });
           },
         });
 
-        if (response.createChannel.errors && response.createChannel.errors.length > 0) {
-          setErrors(response.createChannel.errors);
+        if (response.createTeam.errors && response.createTeam.errors.length > 0) {
+          setErrors(response.createTeam.errors);
           // return setStatus();
           return;
         }
 
-        history.replace(`/view-team/${teamId}/${response.createChannel.channel._id}`);
+        history.replace(`/view-team/${response.createTeam.team._id}`);
+        onClose();
       } catch (error) {
         throw error;
       } finally {
-        onClose();
         setSubmitting(false);
       }
     },
   }),
-)(AddChannelForm);
+)(AddTeamForm);
