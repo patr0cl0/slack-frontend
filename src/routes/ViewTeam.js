@@ -3,8 +3,7 @@ import { graphql } from 'react-apollo';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/Header';
-import MessageInput from '../components/MessageInput';
-import Messages from '../components/Messages';
+import MessagesContainer from '../containers/MessagesContainer';
 import Sidebar from '../containers/Sidebar';
 import { allTeamsMutation } from '../graphql/team';
 import { reactRouterPropTypes } from '../utils/commonProptypes';
@@ -54,11 +53,9 @@ const ViewTeam = ({ data, match }) => {
 
       <Header>{channel.name}</Header>
 
-      <Messages>
-        qwd
-      </Messages>
-
-      <MessageInput />
+      <MessagesContainer
+        channel={channel}
+      />
     </ViewTeamContainer>
   );
 };

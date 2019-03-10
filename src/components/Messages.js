@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types';
 import React from 'react';
+import { Comment } from 'semantic-ui-react';
 import styled from 'styled-components';
 
 const MessagesContainer = styled.div`
@@ -16,16 +18,38 @@ const MessagesContainer = styled.div`
   }
 `;
 
-const Messages = (props) => (
+const Messages = ({ messages = [] }) => (
   <MessagesContainer>
-    <ul>
-      <li className='message'>asdas</li>
-      <li className='message'>asdas</li>
-      <li className='message'>asdasasd</li>
-      <li className='message'>asdasasd</li>
-      <li className='message'>asdasasdasd</li>
-    </ul>
+    <Comment.Group>
+      {messages.map(m => (
+        <Comment key={m._id}>
+          <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/matt.jpg" />
+          <Comment.Content>
+            <Comment.Author as="a">{m.user.username}</Comment.Author>
+            <Comment.Metadata>
+              <div>{m.createdAt}</div>
+            </Comment.Metadata>
+            <Comment.Text>{m.text}</Comment.Text>
+            <Comment.Actions>
+              <Comment.Action>Reply</Comment.Action>
+            </Comment.Actions>
+          </Comment.Content>
+        </Comment>
+      ))}
+    </Comment.Group>
   </MessagesContainer>
 );
+
+Messages.propTypes = {
+  messages: PropTypes.arrayOf(PropTypes.shape({
+    text: PropTypes.string,
+    _id: PropTypes.string,
+    user: PropTypes.any,
+  })),
+};
+
+Messages.defaultProps = {
+  messages: [],
+};
 
 export default Messages;
