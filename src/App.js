@@ -41,7 +41,7 @@ const App = () => (
       <Route exact path="/signup" component={Register} />
       <Route exact path="/login" component={Login} />
       <PrivateRoute exact path="/create-team" component={CreateTeam} />
-      <PrivateRoute exact path="/view-team" component={ViewTeam} />
+      <PrivateRoute exact path="/view-team/:teamId?/:channelId?" component={ViewTeam} />
     </Switch>
   </Router>
 );

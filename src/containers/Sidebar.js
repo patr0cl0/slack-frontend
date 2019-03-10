@@ -18,12 +18,12 @@ const allTeamsMutation = gql`
 }
 `;
 
-const Sidebar = ({ data: { loading, allTeams } }) => {
+const Sidebar = ({ data: { loading, allTeams }, teamId }) => {
   if (loading) {
     return null;
   }
   // grab the first team 'cause we dont have any logic to know in which team do we are
-  const team = allTeams[allTeams.length - 1];
+  const team = allTeams.find(t => t._id === teamId);
 
   return (
     <Fragment>
@@ -37,12 +37,14 @@ const Sidebar = ({ data: { loading, allTeams } }) => {
         username="fernando"
         users={[{ _id: '1', name: 'javier' }, { _id: '2', name: 'Fernando' }]}
         channels={team.channels.map(c => ({ name: c.name, _id: c._id }))}
+        teamName={team.name}
       />
     </Fragment>
   );
 };
 
 Sidebar.propTypes = {
+  teamId: PropTypes.string.isRequired,
   data: PropTypes.shape({
     loading: PropTypes.bool,
     allTeams: PropTypes.any,

@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import MessageInput from '../components/MessageInput';
 import Messages from '../components/Messages';
 import Sidebar from '../containers/Sidebar';
+import { reactRouterPropTypes } from '../utils/commonProptypes';
 
 const ViewTeamContainer = styled.div`
   display: grid;
@@ -13,9 +14,11 @@ const ViewTeamContainer = styled.div`
   height: 100vh;
 `;
 
-export default () => (
+const ViewTeam = ({ match: { params } }) => (
   <ViewTeamContainer>
-    <Sidebar />
+    <Sidebar
+      teamId={params.teamId}
+    />
     <Header>Header</Header>
     <Messages>
       qwd
@@ -23,3 +26,9 @@ export default () => (
     <MessageInput />
   </ViewTeamContainer>
 );
+
+ViewTeam.propTypes = {
+  ...reactRouterPropTypes,
+};
+
+export default ViewTeam;

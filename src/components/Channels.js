@@ -76,11 +76,11 @@ const ChannelLabel = styled.div`
   }
 `;
 
-const Channels = ({ username, channels, users }) => (
+const Channels = ({ username, channels, users, teamName }) => (
   <ChannelsContainer>
     <div className="header">
       <span className="header-title">
-        advocates-berlin
+        {teamName}
       </span>
       <div>
         <UserLabel>
@@ -112,6 +112,7 @@ const Channels = ({ username, channels, users }) => (
 
 Channels.propTypes = {
   username: PropTypes.string.isRequired,
+  teamName: PropTypes.string.isRequired,
   channels: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.name,

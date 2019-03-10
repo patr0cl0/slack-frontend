@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const TeamsContainer = styled.div`
@@ -31,9 +32,9 @@ const TeamsContainer = styled.div`
 const Teams = ({ teams }) => (
   <TeamsContainer>
     {teams.map(({ _id, name }) => (
-      <div key={_id} className="team">
+      <Link to={`/view-team/${_id}`} key={_id} className="team">
         {name}
-      </div>
+      </Link>
     ))}
   </TeamsContainer>
 );

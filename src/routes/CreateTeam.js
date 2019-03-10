@@ -10,6 +10,9 @@ import { formikPropTypes, httpErrorPropTypes, reactRouterPropTypes } from '../ut
 const createTeamMutation = gql`
   mutation($name: String!) {
     createTeam(name: $name){
+      team {
+        _id
+      }
       errors {
         message
         path
@@ -95,7 +98,7 @@ const CreateTeam = (props) => {
       return setHttpErrors(createTeam.errors);
     }
 
-    return props.history.push('/home');
+    return props.history.push(`/view-team/${createTeam.team._id}`);
   };
 
   return (
