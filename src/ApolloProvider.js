@@ -13,10 +13,22 @@ const afterwareLink = new ApolloLink((operation, forward) => forward(operation)
     const context = operation.getContext();
     const { response: { headers } } = context;
 
-    console.log(headers);
-    if (headers && headers.token && headers['refresh-token']) {
-      localStorage.setItem('token');
-      localStorage.setItem('refreshToken');
+    const tokens = {
+      token: headers.get('token'),
+      refreshToken: headers.get('refresh-token'),
+    };
+
+    if (
+      response.errors
+      && response.errors.length > 0
+      && response.errors[0].message
+      && response.errors[0].message.match(/Not authenticated/)) {
+      window.location.pathname = '/login';
+    }
+
+    if (tokens && tokens.token && tokens.refreshToken) {
+      localStorage.setItem('token', tokens.token);
+      localStorage.setItem('refreshToken', tokens.refreshToken);
     }
 
     return response;

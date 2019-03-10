@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 
 const ChannelsContainer = styled.div`
@@ -13,6 +14,9 @@ const ChannelsContainer = styled.div`
     padding-left: .8rem;
     font-size: 16px;
     font-weight: bold;
+    & i {
+      margin-left: 6px;
+    }
   }
 
   & .header {
@@ -76,7 +80,7 @@ const ChannelLabel = styled.div`
   }
 `;
 
-const Channels = ({ username, channels, users, teamName }) => (
+const Channels = ({ username, channels, users, teamName, onCreateChannelClick }) => (
   <ChannelsContainer>
     <div className="header">
       <span className="header-title">
@@ -93,6 +97,10 @@ const Channels = ({ username, channels, users, teamName }) => (
     <div className="channels">
       <span className="channels-title title">
         CHANNELS
+        <Icon
+          name="add circle"
+          onClick={onCreateChannelClick}
+        />
       </span>
       {channels.map(({ name, _id }) => (
         <ChannelLabel key={_id}>{name}</ChannelLabel>
@@ -113,6 +121,7 @@ const Channels = ({ username, channels, users, teamName }) => (
 Channels.propTypes = {
   username: PropTypes.string.isRequired,
   teamName: PropTypes.string.isRequired,
+  onCreateChannelClick: PropTypes.func.isRequired,
   channels: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.name,
