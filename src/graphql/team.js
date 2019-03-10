@@ -10,6 +10,15 @@ export const allTeamsMutation = gql`
         name
       }
     }
+
+    inviteTeams {
+      _id
+      name
+      channels {
+        _id
+        name
+      }
+    }
   }
 `;
 

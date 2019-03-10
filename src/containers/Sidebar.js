@@ -11,7 +11,6 @@ const Sidebar = ({ teams, currentTeam }) => {
   const [isAddTeamOpen, toggleAddTeam] = useState(false);
   const [isAddMemberOpen, toggleAddMember] = useState(false);
 
-
   return (
     <Fragment>
       <AddChannelModal

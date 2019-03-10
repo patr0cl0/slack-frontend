@@ -1,5 +1,6 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import MessageInput from '../components/MessageInput';
@@ -16,19 +17,37 @@ const ViewTeamContainer = styled.div`
   height: 100vh;
 `;
 
-const ViewTeam = ({ match: { params: { teamId, channelId } }, data: { loading, allTeams } }) => {
+const ViewTeam = ({
+  match: { params: { teamId, channelId } },
+  data: { loading, allTeams, inviteTeams },
+}) => {
   if (loading) {
     return null;
   }
 
-  const team = allTeams.find(t => t._id === teamId) || allTeams[0];
+  const teams = [...allTeams, ...inviteTeams];
+
+  if (!teams.length) {
+    return (<Redirect to="/create-team" />);
+  }
+
+  const team = teamId ? teams.find(t => t._id === teamId) : teams[0];
+
+  if (!team && teamId) {
+    return (<Redirect to="/view-team" />);
+  }
+
   const channel = channelId ? team.channels.find(c => c._id === channelId) : team.channels[0];
+
+  if (!channel && channelId) {
+    return (<Redirect to="/view-team" />);
+  }
 
   return (
     <ViewTeamContainer>
       <Sidebar
         teamId={teamId}
-        teams={allTeams}
+        teams={teams}
         currentTeam={team}
         currentChannel={channel}
       />
@@ -38,6 +57,7 @@ const ViewTeam = ({ match: { params: { teamId, channelId } }, data: { loading, a
       <Messages>
         qwd
       </Messages>
+
       <MessageInput />
     </ViewTeamContainer>
   );

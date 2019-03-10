@@ -79,7 +79,7 @@ export default compose(
           return;
         }
 
-        history.replace(`/view-team/${createTeam.team._id}`);
+        history.push(`/view-team/${createTeam.team._id}`);
       } catch (error) {
         throw error;
       } finally {
