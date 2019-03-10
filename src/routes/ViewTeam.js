@@ -17,10 +17,10 @@ const ViewTeamContainer = styled.div`
   height: 100vh;
 `;
 
-const ViewTeam = ({
-  match: { params: { teamId, channelId } },
-  data: { loading, allTeams, inviteTeams },
-}) => {
+const ViewTeam = ({ data, match }) => {
+  const { teamId, channelId } = match.params;
+  const { loading, allTeams, inviteTeams } = data;
+
   if (loading) {
     return null;
   }
@@ -40,7 +40,7 @@ const ViewTeam = ({
   const channel = channelId ? team.channels.find(c => c._id === channelId) : team.channels[0];
 
   if (!channel && channelId) {
-    return (<Redirect to="/view-team" />);
+    return (<Redirect to={`/view-team/${teamId}`} />);
   }
 
   return (

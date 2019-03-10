@@ -93,37 +93,40 @@ const InviteUserButton = styled.span`
 `;
 
 const Channels = ({
-  username,
+  user,
   channels,
   users,
-  teamName,
-  teamId,
+  currentTeam,
   onCreateChannelClick,
   onAddTeamMemberClick,
 }) => (
   <ChannelsContainer>
     <div className="header">
       <span className="header-title">
-        {teamName}
+        {currentTeam.name}
       </span>
+
       <div>
         <UserLabel>
-          {username}
+          {user.username}
         </UserLabel>
       </div>
-
     </div>
 
     <div className="channels">
       <span className="channels-title title">
         CHANNELS
-        <Icon
-          name="add circle"
-          onClick={onCreateChannelClick}
-        />
+
+        {user._id === currentTeam.owner._id && (
+          <Icon
+            name="add circle"
+            onClick={onCreateChannelClick}
+          />
+        )}
       </span>
+
       {channels.map(({ name, _id }) => (
-        <Link key={_id} to={`/view-team/${teamId}/${_id}`}>
+        <Link key={_id} to={`/view-team/${currentTeam._id}/${_id}`}>
           <ChannelLabel>{name}</ChannelLabel>
         </Link>
       ))}
@@ -133,21 +136,30 @@ const Channels = ({
       <span className="direct-messages-title title">
         DIRECT MESSAGES
       </span>
+
       {users.map(({ name, _id }) => (
         <UserLabel key={_id}>{name}</UserLabel>
       ))}
     </div>
 
-    <InviteUserButton onClick={onAddTeamMemberClick}>
-      + invite people
-    </InviteUserButton>
+    {user._id === currentTeam.owner._id && (
+      <InviteUserButton onClick={onAddTeamMemberClick}>
+        + invite people
+      </InviteUserButton>
+    )}
   </ChannelsContainer>
 );
 
 Channels.propTypes = {
-  username: PropTypes.string.isRequired,
-  teamName: PropTypes.string.isRequired,
-  teamId: PropTypes.string.isRequired,
+  user: PropTypes.shape({
+    _id: PropTypes.string,
+    username: PropTypes.string,
+  }).isRequired,
+  currentTeam: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
+    owner: PropTypes.object.isRequired,
+  }).isRequired,
   onCreateChannelClick: PropTypes.func.isRequired,
   onAddTeamMemberClick: PropTypes.func.isRequired,
   channels: PropTypes.arrayOf(PropTypes.shape({
