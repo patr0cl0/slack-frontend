@@ -32,6 +32,7 @@ const Sidebar = ({ data: { loading, allTeams }, teamId }) => {
       <AddChannelModal
         open={isAddChannelOpen}
         onClose={() => toggleAddChanel(false)}
+        teamId={team._id}
       />
 
       <Teams
