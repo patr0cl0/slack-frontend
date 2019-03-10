@@ -32,3 +32,15 @@ export const createTeamMutation = gql`
     }
   }
 `;
+
+export const addMemberMutation = gql`
+  mutation($email: String!, $teamId: String!) {
+    addTeamMember(email: $email, teamId: $teamId) {
+      ok
+      errors {
+        message
+        path
+      }
+    }
+  }
+`;

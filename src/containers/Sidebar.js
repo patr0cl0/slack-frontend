@@ -3,11 +3,13 @@ import React, { Fragment, useState } from 'react';
 import AddChannelModal from '../components/AddChannelModal';
 import AddTeamModal from '../components/AddTeamModal';
 import Channels from '../components/Channels';
+import InviteMemberModal from '../components/InviteMemberModal';
 import Teams from '../components/Teams';
 
 const Sidebar = ({ teams, currentTeam }) => {
   const [isAddChannelOpen, toggleAddChanel] = useState(false);
   const [isAddTeamOpen, toggleAddTeam] = useState(false);
+  const [isAddMemberOpen, toggleAddMember] = useState(false);
 
 
   return (
@@ -21,6 +23,12 @@ const Sidebar = ({ teams, currentTeam }) => {
       <AddTeamModal
         open={isAddTeamOpen}
         onClose={() => toggleAddTeam(false)}
+      />
+
+      <InviteMemberModal
+        open={isAddMemberOpen}
+        teamId={currentTeam._id}
+        onClose={() => toggleAddMember(false)}
       />
 
       <Teams
@@ -38,6 +46,7 @@ const Sidebar = ({ teams, currentTeam }) => {
         teamName={currentTeam.name}
         teamId={currentTeam._id}
         onCreateChannelClick={() => toggleAddChanel(true)}
+        onAddTeamMemberClick={() => toggleAddMember(true)}
       />
     </Fragment>
   );

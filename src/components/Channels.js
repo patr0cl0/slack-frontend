@@ -81,7 +81,26 @@ const ChannelLabel = styled.div`
   }
 `;
 
-const Channels = ({ username, channels, users, teamName, teamId, onCreateChannelClick }) => (
+const InviteUserButton = styled.span`
+  color: #a897a6;
+  font-size: 16px;
+  padding-left: 1rem;
+  margin-top: .5rem;
+  cursor: pointer;
+  &:hover {
+    color: #FFF;
+  }
+`;
+
+const Channels = ({
+  username,
+  channels,
+  users,
+  teamName,
+  teamId,
+  onCreateChannelClick,
+  onAddTeamMemberClick,
+}) => (
   <ChannelsContainer>
     <div className="header">
       <span className="header-title">
@@ -118,6 +137,10 @@ const Channels = ({ username, channels, users, teamName, teamId, onCreateChannel
         <UserLabel key={_id}>{name}</UserLabel>
       ))}
     </div>
+
+    <InviteUserButton onClick={onAddTeamMemberClick}>
+      + invite people
+    </InviteUserButton>
   </ChannelsContainer>
 );
 
@@ -126,6 +149,7 @@ Channels.propTypes = {
   teamName: PropTypes.string.isRequired,
   teamId: PropTypes.string.isRequired,
   onCreateChannelClick: PropTypes.func.isRequired,
+  onAddTeamMemberClick: PropTypes.func.isRequired,
   channels: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.name,
