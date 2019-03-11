@@ -1,8 +1,10 @@
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
-import { ApolloLink } from 'apollo-link';
+import { ApolloLink, split } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { createHttpLink } from 'apollo-link-http';
+import { WebSocketLink } from 'apollo-link-ws';
+import { getMainDefinition } from 'apollo-utilities';
 import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 
@@ -41,7 +43,24 @@ const middlewareLink = setContext(() => ({
   },
 }));
 
-const link = afterwareLink.concat(middlewareLink.concat(httpLink));
+const wsLink = new WebSocketLink({
+  uri: 'ws://localhost:8000/subscriptions',
+  options: {
+    reconnect: true,
+  },
+});
+
+const httpLinkWithMiddleware = afterwareLink.concat(middlewareLink.concat(httpLink));
+
+
+const link = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query);
+    return kind === 'OperationDefinition' && operation === 'subscription';
+  },
+  wsLink,
+  httpLinkWithMiddleware,
+);
 
 const client = new ApolloClient({
   link,
