@@ -4,6 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import { Input } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { createMessageMutation } from '../graphql/message';
+import { formikPropTypes } from '../utils/commonProptypes';
 
 const MessageInputWrapper = styled.form`
   grid-column: 3;
@@ -27,12 +28,16 @@ const MessageInput = ({
       autoFocus
       name="text"
       loading={isSubmitting}
-      value={values.message}
+      value={values.text}
       onChange={handleChange}
       onBlur={handleBlur}
     />
   </MessageInputWrapper>
 );
+
+MessageInput.propTypes = {
+  ...formikPropTypes,
+};
 
 export default compose(
   graphql(createMessageMutation),
@@ -41,15 +46,20 @@ export default compose(
       text: '',
     }),
     handleSubmit: async ({ text }, { setSubmitting, props, resetForm }) => {
-      const { mutate } = props;
-      if (!text || !text.trim()) {
+      try {
+        const { mutate } = props;
+        if (!text || !text.trim()) {
+          setSubmitting(false);
+          return;
+        }
+
+        await mutate({ variables: { text, channelId: props.channelId } });
+        resetForm({ text: '' });
+      } catch (error) {
+        throw error;
+      } finally {
         setSubmitting(false);
-        return;
       }
-
-      await mutate({ variables: { text, channelId: props.channelId } });
-
-      resetForm();
     },
   }),
 )(MessageInput);

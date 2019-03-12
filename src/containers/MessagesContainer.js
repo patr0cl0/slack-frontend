@@ -13,27 +13,63 @@ const messagesQuery = gql`
       text
       createdAt
       user {
+        _id
         username
       }
     }
   }
 `;
 
-const MessagesContainer = ({ channel }) => (
-  <Query query={messagesQuery} variables={{ channelId: channel._id }}>
-    {({ data: { messages } }) => [
+const NEW_MESSAGE = gql`
+  subscription($channelId: String!) {
+    newChannelMessage(channelId: $channelId) {
+      _id
+      text
+      createdAt
+      user {
+        _id
+        username
+      }
+    }
+  }
+`;
+
+const MessagesContainer = ({ channel }) => ([
+  <Query
+    key="messages-query"
+    query={messagesQuery}
+    variables={{ channelId: channel._id }}
+  >
+    {({ data: { messages = [] }, subscribeToMore }) => (
       <Messages
         key="messages"
         messages={messages}
-      />,
+        subscribeToNewMessages={() => subscribeToMore({
+          document: NEW_MESSAGE,
+          variables: { channelId: channel._id },
+          updateQuery: (prev, { subscriptionData }) => {
+            if (!subscriptionData.data) return prev;
+            const newMessage = subscriptionData.data.newChannelMessage;
 
-      <MessageInput
-        key="messages-input"
-        channelId={channel._id}
-      />,
-    ]}
-  </Query>
-);
+            if (prev.messages[prev.messages.length - 1]._id === newMessage._id) {
+              return prev;
+            }
+
+            return {
+              ...prev,
+              messages: [...prev.messages, newMessage],
+            };
+          },
+        })}
+      />
+    )}
+  </Query>,
+
+  <MessageInput
+    key="messages-input"
+    channelId={channel._id}
+  />,
+]);
 
 MessagesContainer.propTypes = {
   channel: PropTypes.shape({

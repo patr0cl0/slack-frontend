@@ -16,7 +16,9 @@ export const allTeamsMutation = gql`
     inviteTeams {
       _id
       name
-      # owner
+      owner {
+        _id
+      }
       channels {
         _id
         name
