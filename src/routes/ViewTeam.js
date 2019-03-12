@@ -31,7 +31,6 @@ const ViewTeam = ({ data, match }) => {
   }
 
   const team = teamId ? teams.find(t => t._id === teamId) : teams[0];
-  console.log(team, teams)
 
   if (!team && teamId) {
     return (<Redirect to="/view-team" />);

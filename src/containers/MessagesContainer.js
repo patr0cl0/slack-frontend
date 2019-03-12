@@ -37,6 +37,7 @@ const NEW_MESSAGE = gql`
 const MessagesContainer = ({ channel }) => ([
   <Query
     key="messages-query"
+    fetchPolicy="network-only"
     query={messagesQuery}
     variables={{ channelId: channel._id }}
   >

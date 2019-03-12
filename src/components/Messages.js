@@ -23,10 +23,9 @@ const MessagesContainer = styled.div`
 
 const Messages = (props) => {
   const { messages = [], subscribeToNewMessages } = props;
-
-  useEffect(() => {
-    subscribeToNewMessages();
-  });
+  // Subscribe to new messages and unsubscribe to it when the component is destroyed
+  // Cool.
+  useEffect(subscribeToNewMessages);
 
   return (
     <MessagesContainer>
